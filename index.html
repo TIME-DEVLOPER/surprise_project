@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>3D Realistic Book</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #bab9b9;
+            overflow: hidden;
+        }
+        .scene {
+            width: 500px;
+            height: 400px;
+            perspective: 1200px;
+        }
+        .book {
+            width: 300px;
+            height: 400px;
+            position: relative;
+            left: 40px;
+            transform-style: preserve-3d;
+            transform: rotateX(20deg) rotateY(0deg) rotateZ(-10deg);
+            transition: transform 1.5s ease-in-out;
+        }
+        .cover {
+            position: absolute;
+            width: 300px;
+            height: 400px;
+            background: linear-gradient(to right, #a17272, #FAEBD7 );
+            border: 3px solid #8B000b;
+            transform-origin: left;
+            transition: transform 1.5s ease-in-out;
+            z-index: 3;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 28px;
+            font-weight: bold;
+            color: white;
+            text-transform: uppercase;
+            text-align: center;
+        }
+        .cover.front { transform: rotateY(0deg); }
+        .cover.back {
+            transform: rotateY(0deg) translateZ(-50px);
+            background: #d17474;
+        }
+        .spine {
+            position: absolute;
+            width: 50px;
+            height: 400px;
+            background: #cf5656;
+            left: -25px;
+            transform: rotateY(-90deg) translateX(-25px);
+            z-index: 2;
+        }
+        .pages {
+            position: absolute;
+            width: 290px;
+            height: 390px;
+            transform: translateZ(-10px);
+            z-index: 1;
+            overflow: hidden;
+        }
+        .page {
+            position: absolute;
+            width: 280px;
+            height: 380px;
+            background: #f9e4c8;
+            border: 1px solid #c4a484;
+            transform-origin: left;
+            transition: transform 0.8s ease-in-out;
+            top: 0;
+            left: 0;
+            z-index: 10;
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 18px;
+            font-family: 'Arial', sans-serif;
+            text-align: center;
+            padding: 20px;
+            flex-direction: column;
+            box-shadow: 2px 2px 10px rgba(0,0,0,0.1);
+        }
+        .page-number {
+            position: absolute;
+            bottom: 10px;
+            right: 15px;
+            font-size: 14px;
+            color: #8b0000;
+            font-weight: bold;
+        }
+        .heart-page {
+            font-size: 50px;
+            color: red;
+        }
+        .book.open .cover.front {
+            transform: rotateY(-120deg);
+        }
+        .book.open .page {
+            visibility: visible;
+            transition: transform 0.8s ease-in-out;
+        }
+    </style>
+</head>
+<body>
+    <div class="scene">
+        <div class="book" id="book">
+            <div class="cover front" onclick="toggleBook()">LovE  ❤️❤️ BooK</div>
+            <div class="pages" id="pages">
+                <script>
+                    let shayaris = [
+                        "तेरी हर अदा मोहब्बत सी लगती है...\nहर लम्हा तेरी याद आती है...\nतेरी मुस्कान में जादू सा है...\nदिल को छू जाती है ये बात...\nतेरे बिना अधूरा हूँ मैं...\nतेरी यादों में खो जाता हूँ...",
+                        "चाहत की कोई हद नहीं होती...\nइश्क़ की कोई बंदिश नहीं होती...\nदिल जब किसी पे आ जाता है...\nतो फिर किसी और की ख्वाहिश नहीं होती...\nतेरी हर बात अजीब लगती है...\nफिर भी तुझसे मोहब्बत कम नहीं होती...",
+                        "तू मेरे लिए खास है, सबसे जुदा...\nतेरी बातें दिल को छू जाती हैं...\nहर रोज तेरा ख्याल आता है...\nतेरी आँखों में मोहब्बत दिखती है...\nतेरे साथ बिताए पल याद आते हैं...\nतू मेरी दुनिया, तू मेरा जहाँ..."
+                    ];
+                    for (let i = 0; i < shayaris.length; i++) {
+                        document.write(`<div class="page" onclick="togglePage(this)" style="z-index: ${11 - i}; transform: rotateY(0deg); transition-delay: ${i * 0.2}s;">${shayaris[i].replace(/\n/g, '<br>')}<div class="page-number">${i + 1}</div></div>`);
+                    }
+                    document.write(`<div class="page heart-page" onclick="togglePage(this)" style="z-index: 0; transform: rotateY(0deg); transition-delay: 2s;">❤️<br><br><b>I LOVE PIKU</b></div>`);
+                </script>
+            </div>
+            <div class="spine"></div>
+            <div class="cover back"></div>
+        </div>
+    </div>
+    <script>
+        function toggleBook() {
+            let book = document.getElementById("book");
+            let pages = document.querySelectorAll(".page");
+            let isOpen = book.classList.toggle("open");
+            
+            if (!isOpen) {
+                pages.forEach(page => page.style.transform = "rotateY(0deg)");
+            }
+        }
+        
+        function togglePage(page) {
+            let book = document.getElementById("book");
+            book.classList.add("open");
+            page.style.transform = page.style.transform === "rotateY(-120deg)" ? "rotateY(0deg)" : "rotateY(-120deg)";
+        }
+    </script>
+</body>
+</html>
